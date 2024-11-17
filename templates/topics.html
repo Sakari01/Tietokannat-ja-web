@@ -1,0 +1,24 @@
+from db import get_db
+
+def get_list():
+    """Fetches the list of all topics."""
+    db = get_db()
+    result = db.execute("SELECT id, name, description FROM topics ORDER BY created_at DESC").fetchall()
+    return result
+
+def get_topic(topic_id):
+    """Fetches a single topic by ID."""
+    db = get_db()
+    result = db.execute("SELECT id, name, description FROM topics WHERE id = ?", (topic_id,)).fetchone()
+    return result
+
+def create(name, description):
+    """Creates a new topic."""
+    try:
+        db = get_db()
+        db.execute("INSERT INTO topics (name, description) VALUES (?, ?)", (name, description))
+        db.commit()
+        return True
+    except Exception as e:
+        print(f"Error creating topic: {e}")
+        return False

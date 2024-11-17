@@ -1,0 +1,22 @@
+<h1>{{ board_name }}</h1>
+<ul>
+    {% for message in messages %}
+    <li>
+        <p><i>Viesti:</i> {{ message[0] }}</p>
+        <p><i>Lähettäjä:</i> {{ message[1] }}</p>
+        <p><i>Aika:</i> {{ message[2].strftime("%Y-%m-%d %H:%M:%S") }}</p>
+    </li>
+    {% endfor %}
+</ul>
+<hr>
+{% if session.user_id %}
+<form action="/send/{{ board_id }}" method="post">
+    Viesti: <br>
+    <textarea name="content" rows="3" cols="40"></textarea><br>
+    <input type="submit" value="Lähetä">
+</form>
+<a href="/">Takaisin lautoihin</a>
+{% else %}
+<p><a href="/login">Kirjaudu sisään</a> lähettääksesi viestejä.</p>
+{% endif %}
+
