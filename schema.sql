@@ -4,9 +4,15 @@ CREATE TABLE users (
     password TEXT
 );
 
-CREATE TABLE boards (
+CREATE TABLE zones (
     id SERIAL PRIMARY KEY,
     name TEXT UNIQUE
+);
+
+CREATE TABLE boards (
+    id SERIAL PRIMARY KEY,
+    name TEXT UNIQUE,
+    zone_id INT REFERENCES zones(id)
 );
 
 CREATE TABLE messages (
@@ -16,4 +22,5 @@ CREATE TABLE messages (
     board_id INTEGER REFERENCES boards,
     sent_at TIMESTAMP
 );
+
 

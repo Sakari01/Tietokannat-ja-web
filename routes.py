@@ -1,28 +1,50 @@
 from app import app
 from flask import render_template, request, redirect
-import messages, users, boards
+import messages, users, boards, zones
 
 @app.route("/")
-def index():
-    board_list = boards.get_boards()
-    return render_template("index.html", boards=board_list)
+def home():
+    zone_list = zones.get_zones()
+    return render_template("home.html", zones=zone_list)
+    
+@app.route("/zone/<int:zone_id>")
+def view_zone(zone_id):
+    board_list = boards.get_boards(zone_id)
+    return render_template("index.html", boards=board_list, zid=zone_id)
+    
+@app.route("/zone/new")
+def new_zone():
+    return render_template("new_zone.html")
+    
+@app.route("/zone/create", methods=["POST"])
+def create_zone():
+    name = request.form["name"]
+    if zones.create_zone(name):
+        return redirect("/")
+    else:
+        return render_template("error.html", message="aluetta ei voitu luoda")
 
 @app.route("/board/<int:board_id>")
 def view_board(board_id):
     board_name, message_list = boards.get_board_messages(board_id)
     return render_template("board.html", board_name=board_name, messages=message_list, board_id=board_id)
 
-@app.route("/board/new")
-def new_board():
-    return render_template("new_board.html")
+@app.route("/zone/<int:zone_id>/board/new")
+def new_board(zone_id):
+    return render_template("new_board.html", zid=zone_id)
 
-@app.route("/board/create", methods=["POST"])
-def create_board():
+@app.route("/zone/<int:zone_id>/board/create", methods=["POST"])
+def create_board(zone_id):
     name = request.form["name"]
-    if boards.create_board(name):
-        return redirect("/")
+    print(f"Attempting to create board: name={name}, zone_id={zone_id}")
+    correct = boards.create_board(name, zone_id)
+    print(f"Board creation status: {correct}")
+    
+    if correct:
+        return redirect(f"/zone/{zone_id}")
     else:
-        return render_template("error.html", message="Lautaa ei voitu luoda")
+        return render_template("error.html", message="Aluetta ei voitu luoda")
+
 
 @app.route("/send/<int:board_id>", methods=["POST"])
 def send(board_id):

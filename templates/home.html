@@ -1,0 +1,16 @@
+<h1>Keskustelualueet</h1>
+<ul>
+    {% for zone in zones%}
+    <li>
+        <a href="/zone/{{ zone[0] }}">{{ zone[1] }}</a>
+    </li>
+    {% endfor %}
+</ul>
+<hr>
+{% if session.user_id %}
+<p>Olet kirjautunut sisään.</p>
+<a href="/zone/new">Luo uusi alue</a> | <a href="/logout">Kirjaudu ulos</a>
+{% else %}
+<a href="/login">Kirjaudu sisään</a>
+{% endif %}
+

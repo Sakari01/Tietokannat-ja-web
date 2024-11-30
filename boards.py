@@ -1,10 +1,15 @@
 from db import db
 from sqlalchemy.sql import text
 
-def get_boards():
-    sql = text("SELECT id, name FROM boards ORDER BY id")
-    result = db.session.execute(sql)
+def get_boards(zone_id=None):
+    if zone_id:
+        sql = text("SELECT id, name FROM boards WHERE zone_id = :zone_id ORDER BY id")
+        result = db.session.execute(sql, {"zone_id": zone_id})
+    else:
+        sql = text("SELECT id, name FROM boards ORDER BY id")
+        result = db.session.execute(sql)
     return result.fetchall()
+
 
 def get_board_messages(board_id):
     sql_board = text("SELECT name FROM boards WHERE id=:board_id")
@@ -24,12 +29,12 @@ def get_board_messages(board_id):
     messages_result = db.session.execute(sql_messages, {"board_id": board_id})
     return board_name[0], messages_result.fetchall()
 
-def create_board(name):
+def create_board(name, zone_id):
     try:
-        sql = text("INSERT INTO boards (name) VALUES (:name)")
-        db.session.execute(sql, {"name": name})
+        sql = text("INSERT INTO boards (name, zone_id) VALUES (:name, :zone_id)")
+        db.session.execute(sql, {"name": name, "zone_id": zone_id})
         db.session.commit()
         return True
     except Exception as e:
-        print("Error creating board:", e)
+        print(f"Error creating board: {e}")
         return False

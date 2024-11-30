@@ -9,8 +9,7 @@
 <hr>
 {% if session.user_id %}
 <p>Olet kirjautunut sisään.</p>
-<a href="/board/new">Luo uusi lauta</a> | <a href="/logout">Kirjaudu ulos</a>
+<a href="/zone/{{ zid }}/board/new">Luo uusi lauta</a> | <a href="/logout">Kirjaudu ulos</a>
 {% else %}
 <a href="/login">Kirjaudu sisään</a>
 {% endif %}
-

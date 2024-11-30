@@ -1,8 +1,7 @@
 <h1>Luo uusi keskustelulauta</h1>
-<form action="/board/create" method="post">
-    Lautan nimi: <br>
-    <input type="text" name="name"><br><br>
+<form action="/zone/{{ zid }}/board/create" method="post">
+    Laudan aihe: <br>
+    <input type="text" name="name" required><br><br>
     <input type="submit" value="Luo">
 </form>
 <a href="/">Takaisin</a>
-

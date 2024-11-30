@@ -1,6 +1,14 @@
 <h1>{{ board_name }}</h1>
+
+{% if messages %}
+<div>
+    <p><i>Viesti:</i> {{ messages[0][0] }}</p>
+    <p><i>Lähettäjä:</i> {{ messages[0][1] }}</p>
+    <p><i>Aika:</i> {{ messages[0][2].strftime("%Y-%m-%d %H:%M:%S") }}</p>
+</div>
+
 <ul>
-    {% for message in messages %}
+    {% for message in messages[1:] %}
     <li>
         <p><i>Viesti:</i> {{ message[0] }}</p>
         <p><i>Lähettäjä:</i> {{ message[1] }}</p>
@@ -8,6 +16,7 @@
     </li>
     {% endfor %}
 </ul>
+{% endif %}
 <hr>
 {% if session.user_id %}
 <form action="/send/{{ board_id }}" method="post">
