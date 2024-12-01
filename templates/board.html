@@ -4,7 +4,7 @@
 <div>
     <p><i>Viesti:</i> {{ messages[0][0] }}</p>
     <p><i>Lähettäjä:</i> {{ messages[0][1] }}</p>
-    <p><i>Aika:</i> {{ messages[0][2].strftime("%Y-%m-%d %H:%M:%S") }}</p>
+    <p><i>Aika:</i> {{ messages[0][2].strftime("%d-%m-%Y %H:%M:%S") }}</p>
 </div>
 
 <ul>
@@ -12,7 +12,7 @@
     <li>
         <p><i>Viesti:</i> {{ message[0] }}</p>
         <p><i>Lähettäjä:</i> {{ message[1] }}</p>
-        <p><i>Aika:</i> {{ message[2].strftime("%Y-%m-%d %H:%M:%S") }}</p>
+        <p><i>Aika:</i> {{ message[2].strftime("%d-%m-%Y %H:%M:%S") }}</p>
     </li>
     {% endfor %}
 </ul>

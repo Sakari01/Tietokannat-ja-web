@@ -1,15 +1,35 @@
-<h1>Keskustelulaudat</h1>
+<!DOCTYPE html>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+<h1 class="header">Keskustelulaudat</h1>
 <ul>
     {% for board in boards %}
-    <li>
+    <li class="boarditm">
         <a href="/board/{{ board[0] }}">{{ board[1] }}</a>
+        <p>Viestit: {{ board[2] }}</p>
+        <p>
+            Viimeisin viesti: 
+            {% if board[3] %}
+                {{ board[3].strftime('%d-%m-%Y %H:%M:%S') }}
+            {% else %}
+                ei viestejä
+            {% endif %}
+        </p>
     </li>
     {% endfor %}
 </ul>
 <hr>
-{% if session.user_id %}
-<p>Olet kirjautunut sisään.</p>
-<a href="/zone/{{ zid }}/board/new">Luo uusi lauta</a> | <a href="/logout">Kirjaudu ulos</a>
-{% else %}
-<a href="/login">Kirjaudu sisään</a>
-{% endif %}
+<div class="login">
+    {% if session.user_id %}
+    <p>Olet kirjautunut sisään.</p>
+    <a href="/zone/{{ zid }}/board/new">Luo uusi lauta</a> 
+    | 
+    <a href="/logout">Kirjaudu ulos</a>
+    {% else %}
+    <a href="/login">Kirjaudu sisään</a>
+    {% endif %}
+</div>

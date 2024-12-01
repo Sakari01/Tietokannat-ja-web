@@ -3,10 +3,27 @@ from sqlalchemy.sql import text
 
 def get_boards(zone_id=None):
     if zone_id:
-        sql = text("SELECT id, name FROM boards WHERE zone_id = :zone_id ORDER BY id")
+        sql = text("""
+            SELECT B.id, B.name, 
+                   COUNT(M.id) AS message_count, 
+                   MAX(M.sent_at) AS last_post
+            FROM boards B
+            LEFT JOIN messages M ON B.id = M.board_id
+            WHERE B.zone_id = :zone_id
+            GROUP BY B.id
+            ORDER BY B.id
+        """)
         result = db.session.execute(sql, {"zone_id": zone_id})
     else:
-        sql = text("SELECT id, name FROM boards ORDER BY id")
+        sql = text("""
+            SELECT B.id, B.name, 
+                   COUNT(M.id) AS message_count, 
+                   MAX(M.sent_at) AS last_post
+            FROM boards B
+            LEFT JOIN messages M ON B.id = M.board_id
+            GROUP BY B.id
+            ORDER BY B.id
+        """)
         result = db.session.execute(sql)
     return result.fetchall()
 
