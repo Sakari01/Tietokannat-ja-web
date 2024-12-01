@@ -1,7 +1,5 @@
-Valitsin aiheekseni esimerkkisovelluksissa annetun keskustelusovelluksen.
-Minulla on jo pitkään ollut kiinnostusta luoda jonkinlainen versio keskustelusovelluksesta, joten tämä aihe sopii minulle erittäin hyvin.
+Sovellus on toivottua aikataulua jäljessä, kohdattuani odotettua enemmän ongelmia toteuttaa ohjelmaa ubuntu for Windowsissa. 
 
-Tarkoituksenani on sisällyttää mahdollisimman paljon esimerkissä annettuja ominaisuuksia, mutta projektin edetessä tämä suunnitelma saattaa muuttua.
-Mikäli sovellus osoittuu työläämmäksi kuin odotan, olen valmis karsimaan joitakin ominaisuuksia esim. 
-"Ylläpitäjä voi luoda salaisen alueen ja määrittää, keillä käyttäjillä on pääsy alueelle." on ominaisuus joka ei välttämättä päädy lopputyöhön.
-Mikäli minulla taas jää ylimääräistä aikaa, videoiden ja kuvien lähettäminen keskustelusovelluksessa on ominaisuus, jonka haluaisin lisätä.
+Sovellus on nykytilassaan toimiva pohja, johon pystyy lisäämään keskustelualueita, lähettämään viestejä, kirjautumaan sisään ja ulos, sekä rekisteröimään uuden käyttäjän.
+
+Sovelluksen testaaminen vaatii sisäänkirjautumisen, jonka jälkeen käyttäjä on vapaa testaamaan edellä mainittuja ominaisuuksia.
