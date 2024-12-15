@@ -8,11 +8,14 @@ def get_zones():
 
 
 def create_zone(name):
-    try:
-        sql = text("INSERT INTO zones (name) VALUES (:name)")
-        db.session.execute(sql, {"name": name})
-        db.session.commit()
-        return True
-    except Exception as e:
-        print("Error creating zone:", e)
-        return False
+    sql = text("INSERT INTO zones (name) VALUES (:name)")
+    db.session.execute(sql, {"name": name})
+    db.session.commit()
+    return True
+        
+
+def delete_zone(zone_id):
+    sql = text("DELETE FROM zones WHERE id = :id")
+    db.session.execute(sql, {"id": zone_id})
+    db.session.commit()
+    return True

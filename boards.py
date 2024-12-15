@@ -47,11 +47,7 @@ def get_board_messages(board_id):
     return board_name[0], messages_result.fetchall()
 
 def create_board(name, zone_id):
-    try:
-        sql = text("INSERT INTO boards (name, zone_id) VALUES (:name, :zone_id)")
-        db.session.execute(sql, {"name": name, "zone_id": zone_id})
-        db.session.commit()
-        return True
-    except Exception as e:
-        print(f"Error creating board: {e}")
-        return False
+    sql = text("INSERT INTO boards (name, zone_id) VALUES (:name, :zone_id)")
+    db.session.execute(sql, {"name": name, "zone_id": zone_id})
+    db.session.commit()
+    return True

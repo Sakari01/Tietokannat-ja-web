@@ -14,7 +14,15 @@ def view_zone(zone_id):
     
 @app.route("/zone/new")
 def new_zone():
+    allow = False
+    if users.is_admin():
+        allow = True
+
+    if not allow:
+        return render_template("error.html", message="Ei admin-oikeuksia")
+
     return render_template("new_zone.html")
+
     
 @app.route("/zone/create", methods=["POST"])
 def create_zone():
@@ -23,6 +31,35 @@ def create_zone():
         return redirect("/")
     else:
         return render_template("error.html", message="aluetta ei voitu luoda")
+        
+@app.route("/zone/del")
+def zone_del():
+    allow = False
+    if users.is_admin():
+        allow = True
+
+    if not allow:
+        return render_template("error.html", message="Ei admin-oikeuksia")
+        
+    zone_list = zones.get_zones()    
+    return render_template("zone_del.html", zones=zone_list)
+    
+@app.route("/zone/delete", methods=["POST"])
+def zone_delete():
+    allow = False
+    if users.is_admin():
+        allow = True
+
+    if not allow:
+        return render_template("error.html", message="Ei admin-oikeuksia")
+
+    zone_id = request.form["zone_id"]
+    if zones.delete_zone(zone_id):
+        return redirect("/")
+    else:
+        return render_template("error.html", message="Aluetta ei voitu poistaa")
+
+
 
 @app.route("/board/<int:board_id>")
 def view_board(board_id):
@@ -79,10 +116,11 @@ def register():
         username = request.form["username"]
         password1 = request.form["password1"]
         password2 = request.form["password2"]
+        is_admin = request.form.get("is_admin") == "true"
+        
         if password1 != password2:
             return render_template("error.html", message="Salasanat eroavat")
-        if users.register(username, password1):
+        if users.register(username, password1, is_admin):
             return redirect("/")
         else:
             return render_template("error.html", message="Rekisteröinti ei onnistunut")
-

@@ -1,0 +1,13 @@
+<h1>Poista keskustelualue</h1>
+<form action="/zone/delete" method="post">
+    <ul>
+        {% for zone in zones %}
+        <li>
+            {{ zone[1] }}
+            <button type="submit" name="zone_id" value="{{ zone[0] }}">Poista</button>
+        </li>
+        {% endfor %}
+    </ul>
+</form>
+<a href="/">Takaisin</a>
+

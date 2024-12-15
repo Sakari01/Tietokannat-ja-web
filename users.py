@@ -19,15 +19,25 @@ def login(username, password):
 def logout():
     del session["user_id"]
 
-def register(username, password):
+def register(username, password, is_admin=False):
     hash_value = generate_password_hash(password)
-    try:
-        sql = text("INSERT INTO users (username,password) VALUES (:username,:password)")
-        db.session.execute(sql, {"username": username, "password": hash_value})
-        db.session.commit()
-    except:
-        return False
+    
+    sql = text("INSERT INTO users (username, password, is_admin) VALUES (:username, :password, :is_admin)")
+    db.session.execute(sql, {"username": username, "password": hash_value, "is_admin": is_admin})
+    db.session.commit()
+    
     return login(username, password)
+
 
 def user_id():
     return session.get("user_id", 0)
+
+def is_admin():
+    user_id = session.get("user_id")
+    if not user_id:
+        return False
+
+    sql = text("SELECT is_admin FROM users WHERE id = :id")
+    result = db.session.execute(sql, {"id": user_id}).fetchone()
+    return result and result.is_admin
+

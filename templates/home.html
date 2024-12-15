@@ -20,7 +20,9 @@
     <div class="login">
     {% if session.user_id %}
     <p>Olet kirjautunut sisään.</p>
-    <a href="/zone/{{ zid }}/board/new">Luo uusi lauta</a> 
+    <a href="/zone/new">Luo uusi alue</a> 
+    | 
+    <a href="/zone/del">Poista alue</a> 
     | 
     <a href="/logout">Kirjaudu ulos</a>
     {% else %}
