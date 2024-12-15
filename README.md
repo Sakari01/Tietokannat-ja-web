@@ -1,7 +1,13 @@
-Keskeneräisessä sovelluksessa käyttäjä voi:
+Klous sovelluksessa käyttäjä voi:
   - Luoda uuden käyttäjän, sekä kirjautua sisään ja ulos
   - Luoda uusia keskustelualueita, sekä keskustelupalstoja näille alueille
   - lähettää viestejä ja nähdä muiden lähettämät viestit, sekä niiden lähetysajankohdat
+  - Lisätä keskustelulautoja suosikeihin
+  - Luoda käyttäjän admin-oikeuksilla
+
+Admin oikeuksilla käyttäjä voi:
+  - Poistaa ja luoda uusia keskustelualueita
+
 
 ## ASENNUS
 
