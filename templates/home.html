@@ -9,6 +9,16 @@
         <h1>Klous</h1>
     </div>
 
+<h2>Suosikit</h2>
+<ul>
+    {% for board in favorites %}
+    <li>
+        <a href="/board/{{ board[0] }}">{{ board[1] }}</a>
+    </li>
+    {% endfor %}
+</ul>
+
+
     <h2>Keskustelualueet</h2>
     <ul>
         {% for zone in zones %}

@@ -1,11 +1,21 @@
 from app import app
-from flask import render_template, request, redirect
+from db import db
+from flask import render_template, request, redirect, session, abort
+from sqlalchemy.sql import text
 import messages, users, boards, zones
+import favorites
+import secrets
 
 @app.route("/")
 def home():
     zone_list = zones.get_zones()
-    return render_template("home.html", zones=zone_list)
+    favorites_list = []
+
+    if users.is_user():
+        favorites_list = favorites.get_favorites(users.user_id())
+
+    return render_template("home.html", zones=zone_list, favorites=favorites_list)
+
     
 @app.route("/zone/<int:zone_id>")
 def view_zone(zone_id):
@@ -64,7 +74,24 @@ def zone_delete():
 @app.route("/board/<int:board_id>")
 def view_board(board_id):
     board_name, message_list = boards.get_board_messages(board_id)
-    return render_template("board.html", board_name=board_name, messages=message_list, board_id=board_id)
+    is_favorite = False
+    is_user = users.is_user()
+
+    if is_user:
+        user_id = users.user_id()
+        is_favorite = db.session.execute(
+            text("SELECT 1 FROM favorites WHERE user_id = :user_id AND board_id = :board_id"),
+            {"user_id": user_id, "board_id": board_id}
+        ).fetchone() is not None
+
+    return render_template(
+        "board.html",
+        board_name=board_name,
+        messages=message_list,
+        board_id=board_id,
+        is_favorite=is_favorite,
+        is_user=is_user
+    )
 
 @app.route("/zone/<int:zone_id>/board/new")
 def new_board(zone_id):
@@ -76,7 +103,6 @@ def create_board(zone_id):
     print(f"Attempting to create board: name={name}, zone_id={zone_id}")
     correct = boards.create_board(name, zone_id)
     print(f"Board creation status: {correct}")
-    
     if correct:
         return redirect(f"/zone/{zone_id}")
     else:
@@ -85,11 +111,39 @@ def create_board(zone_id):
 
 @app.route("/send/<int:board_id>", methods=["POST"])
 def send(board_id):
+
     content = request.form["content"]
     if messages.send(content, board_id):
         return redirect(f"/board/{board_id}")
     else:
         return render_template("error.html", message="Viestin lähetys ei onnistunut")
+        
+        
+        
+@app.route("/board/<int:board_id>/favorite", methods=["POST"])
+def add_favorite(board_id):
+    if not users.is_user():
+        return render_template("error.html", message="Sinun täytyy kirjautua sisään")
+
+    user_id = users.user_id()
+    if favorites.add_favorite(user_id, board_id):
+        return redirect(f"/board/{board_id}")
+    else:
+        return render_template("error.html", message="Lisäystä ei voitu suorittaa, yritä uudelleen")
+
+@app.route("/board/<int:board_id>/unfavorite", methods=["POST"])
+def remove_favorite(board_id):
+    if not users.is_user():
+        return render_template("error.html", message="Sinun täytyy kirjautua sisään")
+
+    user_id = users.user_id()
+    if favorites.remove_favorite(user_id, board_id):
+        return redirect(f"/board/{board_id}")
+    else:
+        return render_template("error.html", message="Poistamista ei voitu suorittaa, yritä uudelleen")        
+
+        
+    
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -124,3 +178,4 @@ def register():
             return redirect("/")
         else:
             return render_template("error.html", message="Rekisteröinti ei onnistunut")
+            

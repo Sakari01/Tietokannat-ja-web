@@ -31,6 +31,9 @@ def register(username, password, is_admin=False):
 
 def user_id():
     return session.get("user_id", 0)
+    
+def is_user():
+    return "user_id" in session
 
 def is_admin():
     user_id = session.get("user_id")

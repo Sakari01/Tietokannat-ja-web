@@ -1,31 +1,45 @@
 <h1>{{ board_name }}</h1>
 
 {% if messages %}
-<div>
-    <p><i>Viesti:</i> {{ messages[0][0] }}</p>
-    <p><i>Lähettäjä:</i> {{ messages[0][1] }}</p>
-    <p><i>Aika:</i> {{ messages[0][2].strftime("%d-%m-%Y %H:%M:%S") }}</p>
-</div>
+    <div>
+        <p><i>Viesti:</i> {{ messages[0][0] }}</p>
+        <p><i>Lähettäjä:</i> {{ messages[0][1] }}</p>
+        <p><i>Aika:</i> {{ messages[0][2].strftime("%d-%m-%Y %H:%M:%S") }}</p>
+    </div>
 
-<ul>
-    {% for message in messages[1:] %}
-    <li>
-        <p><i>Viesti:</i> {{ message[0] }}</p>
-        <p><i>Lähettäjä:</i> {{ message[1] }}</p>
-        <p><i>Aika:</i> {{ message[2].strftime("%d-%m-%Y %H:%M:%S") }}</p>
-    </li>
-    {% endfor %}
-</ul>
+
+    {% if is_user %}
+        {% if is_favorite %}
+            <form action="/board/{{ board_id }}/unfavorite" method="post" style="display:inline;">
+                <button type="submit">Poista suosikeista</button>
+            </form>
+        {% else %}
+            <form action="/board/{{ board_id }}/favorite" method="post" style="display:inline;">
+                <button type="submit">Lisää suosikkeihin</button>
+            </form>
+        {% endif %}
+    {% endif %}
+
+    <ul>
+        {% for message in messages[1:] %}
+        <li>
+            <p><i>Viesti:</i> {{ message[0] }}</p>
+            <p><i>Lähettäjä:</i> {{ message[1] }}</p>
+            <p><i>Aika:</i> {{ message[2].strftime("%d-%m-%Y %H:%M:%S") }}</p>
+        </li>
+        {% endfor %}
+    </ul>
 {% endif %}
+
 <hr>
-{% if session.user_id %}
-<form action="/send/{{ board_id }}" method="post">
-    Viesti: <br>
-    <textarea name="content" rows="3" cols="40"></textarea><br>
-    <input type="submit" value="Lähetä">
-</form>
-<a href="/">Takaisin lautoihin</a>
-{% else %}
-<p><a href="/login">Kirjaudu sisään</a> lähettääksesi viestejä.</p>
-{% endif %}
 
+{% if session.user_id %}
+    <form action="/send/{{ board_id }}" method="post">
+        Viesti: <br>
+        <textarea name="content" rows="3" cols="40"></textarea><br>
+        <input type="submit" value="Lähetä">
+    </form>
+    <a href="/">Takaisin lautoihin</a>
+{% else %}
+    <p><a href="/login">Kirjaudu sisään</a> lähettääksesi viestejä.</p>
+{% endif %}

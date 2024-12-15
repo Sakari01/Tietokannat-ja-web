@@ -24,3 +24,10 @@ CREATE TABLE messages (
     sent_at TIMESTAMP
 );
 
+CREATE TABLE favorites (
+    id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES users(id) ON DELETE CASCADE,
+    board_id INT REFERENCES boards(id) ON DELETE CASCADE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
